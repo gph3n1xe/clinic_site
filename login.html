@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="login.css">
+  <link rel="javascript" href="login.js">
+  <title>Dentelo Auth</title>
+</head>
+<body>
+<div class="wrapper">
+  <div class="blue-panel" id="bluePanel">
+    <h1 style="margin-bottom: 5%;">Welcome to Dentelo</h1>
+    <p style="font-family: Arial, Helvetica, sans-serif; font-size: larger;">Best dental services with modern UI experience.</p>
+    <button id="startBtn">Login</button>
+  </div>
+
+  <div class="forms" id="formsArea">
+
+      <div class="form-box fade-in" id="loginForm">
+        <h1 style="padding: 20px 20px 20px 0px;">Login</h1>
+        <div class="input-group">
+          <label>Username</label>
+          <input type="text" id="username">
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="password">
+        </div>
+
+        <button class="btn" id="loginBtn" style="margin-top: 10%;" >Login</button>
+
+        <div class="social-icons">
+          <div>f</div>
+          <div>G</div>
+          <div>X</div>
+        </div>
+
+      </div>
+
+  </div>
+<script>
+  
+// slide animation
+document.getElementById("startBtn").onclick = () => {
+  document.getElementById("bluePanel").classList.add("hide");
+  setTimeout(()=> document.getElementById("formsArea").classList.add("show"), 400);
+};
+
+// LOGIN ACTION
+document.getElementById("loginBtn").onclick = function(e){
+    e.preventDefault();
+
+    let u = document.getElementById("username").value.trim();
+    let p = document.getElementById("password").value.trim();
+
+    if(!u || !p){
+        alert("Please enter username & password");
+        return;
+    }
+
+    fetch("backend/login.php", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: "username=" + encodeURIComponent(u) + "&password=" + encodeURIComponent(p)
+
+        
+    })
+    .then(r => r.text())
+    .then(res => {
+    if(res === "doctor"){
+        window.location.href = "backend/doctor_dashboard.php";
+    }
+   else if(res === "patient"){
+    window.location.href = "index.php";
+}
+
+    else{
+        alert("Invalid credentials");
+    }
+});
+
+};
+
+</script>
+</div>
+</body>
+</html>
